@@ -1,18 +1,15 @@
-From 3a91b654668d773319e50141b4c647daec7903e2 Mon Sep 17 00:00:00 2001
+From bad81d9ef9bd8e7639db35497d3f7227dedd75da Mon Sep 17 00:00:00 2001
 From: Roger Shimizu <rogershimizu@gmail.com>
 Date: Mon, 22 Jun 2015 20:52:38 +0900
-Subject: [PATCH v2 1/2] ARM: dts: add buffalo linkstation ls-wxl/wsxl
-To: Jason Cooper <jason@lakedaemon.net>,
-    Andrew Lunn <andrew@lunn.ch>,
-    linux-arm-kernel@lists.infradead.org
-Cc: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
-    Roger Shimizu <rogershimizu@gmail.com>
+Subject: [PATCH v3 1/2] ARM: dts: add buffalo linkstation ls-wxl/wsxl
 
 Add dts file to support Buffalo Linkstation LS-WXL and LS-WSXL,
 which are 2-bay NAS with 3.5" and 2.5" HDD respectively.
 
 Signed-off-by: Roger Shimizu <rogershimizu@gmail.com>
 Reviewed-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Acked-by: Andrew Lunn <andrew@lunn.ch>
+Acked-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
 ---
  .../devicetree/bindings/arm/marvell,kirkwood.txt   |   1 +
  arch/arm/boot/dts/Makefile                         |   1 +

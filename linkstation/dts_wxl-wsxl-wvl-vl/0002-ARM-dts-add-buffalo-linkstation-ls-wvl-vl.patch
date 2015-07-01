@@ -1,18 +1,15 @@
-From c7ef1c040431f434f24abe28b08e1b0becb88e79 Mon Sep 17 00:00:00 2001
+From 02f0a097b766f33bb4317c1f577df15670905397 Mon Sep 17 00:00:00 2001
 From: Roger Shimizu <rogershimizu@gmail.com>
 Date: Mon, 22 Jun 2015 20:54:23 +0900
-Subject: [PATCH v2 2/2] ARM: dts: add buffalo linkstation ls-wvl/vl
-To: Jason Cooper <jason@lakedaemon.net>,
-    Andrew Lunn <andrew@lunn.ch>,
-    linux-arm-kernel@lists.infradead.org
-Cc: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
-    Roger Shimizu <rogershimizu@gmail.com>
+Subject: [PATCH v3 2/2] ARM: dts: add buffalo linkstation ls-wvl/vl
 
 Add dts file to support Buffalo Linkstation LS-WVL and LS-VL,
 which are 3.5" HDD NAS in 2-bay and 1-bay respectively.
 
 Signed-off-by: Roger Shimizu <rogershimizu@gmail.com>
 Reviewed-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Acked-by: Andrew Lunn <andrew@lunn.ch>
+Acked-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
 ---
  .../devicetree/bindings/arm/marvell,kirkwood.txt   |   1 +
  arch/arm/boot/dts/Makefile                         |   1 +
@@ -46,7 +43,7 @@ index b45c974..5b36795 100644
  	kirkwood-mplcec4.dtb \
 diff --git a/arch/arm/boot/dts/kirkwood-lswvl.dts b/arch/arm/boot/dts/kirkwood-lswvl.dts
 new file mode 100644
-index 0000000..ad35329
+index 0000000..09eed3c
 --- /dev/null
 +++ b/arch/arm/boot/dts/kirkwood-lswvl.dts
 @@ -0,0 +1,301 @@
@@ -123,7 +120,7 @@ index 0000000..ad35329
 +				marvell,pins = "mpp36";
 +				marvell,function = "gpio";
 +			};
-+			pmx_led_function_red: pmx-led-function_red {
++			pmx_led_function_red: pmx-led-function-red {
 +				marvell,pins = "mpp37";
 +				marvell,function = "gpio";
 +			};
