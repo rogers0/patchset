@@ -1,7 +1,7 @@
-From 6b1780e983e9ce024492dbc5db0590a97a253284 Mon Sep 17 00:00:00 2001
+From c7ef1c040431f434f24abe28b08e1b0becb88e79 Mon Sep 17 00:00:00 2001
 From: Roger Shimizu <rogershimizu@gmail.com>
-Date: Wed, 17 Jun 2015 19:06:58 +0900
-Subject: [PATCH 2/2] ARM: dts: add buffalo linkstation ls-wvl/vl
+Date: Mon, 22 Jun 2015 20:54:23 +0900
+Subject: [PATCH v2 2/2] ARM: dts: add buffalo linkstation ls-wvl/vl
 To: Jason Cooper <jason@lakedaemon.net>,
     Andrew Lunn <andrew@lunn.ch>,
     linux-arm-kernel@lists.infradead.org
@@ -16,40 +16,40 @@ Reviewed-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
 ---
  .../devicetree/bindings/arm/marvell,kirkwood.txt   |   1 +
  arch/arm/boot/dts/Makefile                         |   1 +
- arch/arm/boot/dts/kirkwood-lswvl.dts               | 307 +++++++++++++++++++++
- 3 files changed, 309 insertions(+)
+ arch/arm/boot/dts/kirkwood-lswvl.dts               | 301 +++++++++++++++++++++
+ 3 files changed, 303 insertions(+)
  create mode 100644 arch/arm/boot/dts/kirkwood-lswvl.dts
 
 diff --git a/Documentation/devicetree/bindings/arm/marvell,kirkwood.txt b/Documentation/devicetree/bindings/arm/marvell,kirkwood.txt
-index f541506..c7c9243 100644
+index b79212f..5171ad8 100644
 --- a/Documentation/devicetree/bindings/arm/marvell,kirkwood.txt
 +++ b/Documentation/devicetree/bindings/arm/marvell,kirkwood.txt
-@@ -23,6 +23,7 @@ board. Currently known boards are:
+@@ -20,6 +20,7 @@ And in addition, the compatible shall be extended with the specific
+ board. Currently known boards are:
+ 
+ "buffalo,lschlv2"
++"buffalo,lswvl"
+ "buffalo,lswxl"
  "buffalo,lsxhl"
  "buffalo,lsxl"
- "buffalo,lswxl"
-+"buffalo,lswvl"
- "dlink,dns-320"
- "dlink,dns-320-a1"
- "dlink,dns-325"
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index e0ebd59..a16cfca 100644
+index b45c974..5b36795 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -178,6 +178,7 @@ dtb-$(CONFIG_MACH_KIRKWOOD) += \
+@@ -176,6 +176,7 @@ dtb-$(CONFIG_MACH_KIRKWOOD) += \
+ 	kirkwood-km_kirkwood.dtb \
+ 	kirkwood-laplug.dtb \
  	kirkwood-lschlv2.dtb \
- 	kirkwood-lsxhl.dtb \
- 	kirkwood-lswxl.dtb \
 +	kirkwood-lswvl.dtb \
+ 	kirkwood-lswxl.dtb \
+ 	kirkwood-lsxhl.dtb \
  	kirkwood-mplcec4.dtb \
- 	kirkwood-mv88f6281gtw-ge.dtb \
- 	kirkwood-nas2big.dtb \
 diff --git a/arch/arm/boot/dts/kirkwood-lswvl.dts b/arch/arm/boot/dts/kirkwood-lswvl.dts
 new file mode 100644
-index 0000000..a12941a
+index 0000000..ad35329
 --- /dev/null
 +++ b/arch/arm/boot/dts/kirkwood-lswvl.dts
-@@ -0,0 +1,307 @@
+@@ -0,0 +1,301 @@
 +/*
 + * Device Tree file for Buffalo Linkstation LS-WVL/VL
 + *
@@ -68,7 +68,7 @@ index 0000000..a12941a
 +
 +/ {
 +	model = "Buffalo Linkstation LS-WVL/VL";
-+	compatible = "buffalo,linkstation,lswvl", "buffalo,lswvl", "buffalo,linkstation,lsvl", "buffalo,lsvl", "marvell,kirkwood-88f6282", "marvell,kirkwood";
++	compatible = "buffalo,lswvl", "buffalo,lsvl", "marvell,kirkwood-88f6282", "marvell,kirkwood";
 +
 +	memory { /* 256 MB */
 +		device_type = "memory";
@@ -155,16 +155,9 @@ index 0000000..a12941a
 +				marvell,pins = "mpp47";
 +				marvell,function = "gpio";
 +			};
-+
-+		};
-+
-+		i2c@11000 {
-+			status = "okay";
 +		};
 +
 +		serial@12000 {
-+			pinctrl-0 = <&pmx_uart0>;
-+			pinctrl-names = "default";
 +			status = "okay";
 +		};
 +
@@ -179,7 +172,7 @@ index 0000000..a12941a
 +			m25p40@0 {
 +				#address-cells = <1>;
 +				#size-cells = <1>;
-+				compatible = "m25p40";
++				compatible = "st,m25p40", "jedec,spi-nor";
 +				reg = <0>;
 +				spi-max-frequency = <25000000>;
 +				mode = <0>;
@@ -203,7 +196,6 @@ index 0000000..a12941a
 +			};
 +		};
 +	};
-+
 +
 +	gpio_keys {
 +		compatible = "gpio-keys";
@@ -271,12 +263,12 @@ index 0000000..a12941a
 +
 +		led@6 {
 +			label = "lswvl:red:hdderr0";
-+			gpios = <&gpio0 34 GPIO_ACTIVE_HIGH>;
++			gpios = <&gpio0 34 GPIO_ACTIVE_LOW>;
 +		};
 +
 +		led@7 {
 +			label = "lswvl:red:hdderr1";
-+			gpios = <&gpio0 35 GPIO_ACTIVE_HIGH>;
++			gpios = <&gpio0 35 GPIO_ACTIVE_LOW>;
 +		};
 +	};
 +
@@ -316,7 +308,7 @@ index 0000000..a12941a
 +			enable-active-high;
 +			regulator-always-on;
 +			regulator-boot-on;
-+			gpio = <&gpio0 12 GPIO_ACTIVE_LOW>;
++			gpio = <&gpio0 12 GPIO_ACTIVE_HIGH>;
 +		};
 +		hdd_power0: regulator@2 {
 +			compatible = "regulator-fixed";
@@ -327,7 +319,7 @@ index 0000000..a12941a
 +			enable-active-high;
 +			regulator-always-on;
 +			regulator-boot-on;
-+			gpio = <&gpio0 8 GPIO_ACTIVE_LOW>;
++			gpio = <&gpio0 8 GPIO_ACTIVE_HIGH>;
 +		};
 +		hdd_power1: regulator@3 {
 +			compatible = "regulator-fixed";
@@ -338,13 +330,14 @@ index 0000000..a12941a
 +			enable-active-high;
 +			regulator-always-on;
 +			regulator-boot-on;
-+			gpio = <&gpio0 9 GPIO_ACTIVE_LOW>;
++			gpio = <&gpio0 9 GPIO_ACTIVE_HIGH>;
 +		};
 +	};
 +};
 +
 +&mdio {
 +	status = "okay";
++
 +	ethphy0: ethernet-phy@0 {
 +		device_type = "ethernet-phy";
 +		reg = <0>;
@@ -353,6 +346,7 @@ index 0000000..a12941a
 +
 +&eth0 {
 +	status = "okay";
++
 +	ethernet0-port@0 {
 +		phy-handle = <&ethphy0>;
 +	};

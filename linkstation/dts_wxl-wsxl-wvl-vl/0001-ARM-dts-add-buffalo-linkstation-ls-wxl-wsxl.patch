@@ -1,7 +1,7 @@
-From e4345b4554eaf8a1dd27b31cca3389d0aab60495 Mon Sep 17 00:00:00 2001
+From 3a91b654668d773319e50141b4c647daec7903e2 Mon Sep 17 00:00:00 2001
 From: Roger Shimizu <rogershimizu@gmail.com>
-Date: Wed, 17 Jun 2015 19:05:58 +0900
-Subject: [PATCH 1/2] ARM: dts: add buffalo linkstation ls-wxl/wsxl
+Date: Mon, 22 Jun 2015 20:52:38 +0900
+Subject: [PATCH v2 1/2] ARM: dts: add buffalo linkstation ls-wxl/wsxl
 To: Jason Cooper <jason@lakedaemon.net>,
     Andrew Lunn <andrew@lunn.ch>,
     linux-arm-kernel@lists.infradead.org
@@ -16,40 +16,40 @@ Reviewed-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
 ---
  .../devicetree/bindings/arm/marvell,kirkwood.txt   |   1 +
  arch/arm/boot/dts/Makefile                         |   1 +
- arch/arm/boot/dts/kirkwood-lswxl.dts               | 312 +++++++++++++++++++++
- 3 files changed, 314 insertions(+)
+ arch/arm/boot/dts/kirkwood-lswxl.dts               | 301 +++++++++++++++++++++
+ 3 files changed, 303 insertions(+)
  create mode 100644 arch/arm/boot/dts/kirkwood-lswxl.dts
 
 diff --git a/Documentation/devicetree/bindings/arm/marvell,kirkwood.txt b/Documentation/devicetree/bindings/arm/marvell,kirkwood.txt
-index 4f40ff3..f541506 100644
+index 4f40ff3..b79212f 100644
 --- a/Documentation/devicetree/bindings/arm/marvell,kirkwood.txt
 +++ b/Documentation/devicetree/bindings/arm/marvell,kirkwood.txt
-@@ -22,6 +22,7 @@ board. Currently known boards are:
+@@ -20,6 +20,7 @@ And in addition, the compatible shall be extended with the specific
+ board. Currently known boards are:
+ 
  "buffalo,lschlv2"
++"buffalo,lswxl"
  "buffalo,lsxhl"
  "buffalo,lsxl"
-+"buffalo,lswxl"
  "dlink,dns-320"
- "dlink,dns-320-a1"
- "dlink,dns-325"
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index a8bf702..e0ebd59 100644
+index a8bf702..b45c974 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -177,6 +177,7 @@ dtb-$(CONFIG_MACH_KIRKWOOD) += \
+@@ -176,6 +176,7 @@ dtb-$(CONFIG_MACH_KIRKWOOD) += \
+ 	kirkwood-km_kirkwood.dtb \
  	kirkwood-laplug.dtb \
  	kirkwood-lschlv2.dtb \
- 	kirkwood-lsxhl.dtb \
 +	kirkwood-lswxl.dtb \
+ 	kirkwood-lsxhl.dtb \
  	kirkwood-mplcec4.dtb \
  	kirkwood-mv88f6281gtw-ge.dtb \
- 	kirkwood-nas2big.dtb \
 diff --git a/arch/arm/boot/dts/kirkwood-lswxl.dts b/arch/arm/boot/dts/kirkwood-lswxl.dts
 new file mode 100644
-index 0000000..3dcf6fd
+index 0000000..f5db16a
 --- /dev/null
 +++ b/arch/arm/boot/dts/kirkwood-lswxl.dts
-@@ -0,0 +1,312 @@
+@@ -0,0 +1,301 @@
 +/*
 + * Device Tree file for Buffalo Linkstation LS-WXL/WSXL
 + *
@@ -68,7 +68,7 @@ index 0000000..3dcf6fd
 +
 +/ {
 +	model = "Buffalo Linkstation LS-WXL/WSXL";
-+	compatible = "buffalo,linkstation,lswxl", "buffalo,lswxl", "marvell,kirkwood-88f6281", "marvell,kirkwood";
++	compatible = "buffalo,lswxl", "marvell,kirkwood-88f6281", "marvell,kirkwood";
 +
 +	memory { /* 128 MB */
 +		device_type = "memory";
@@ -123,7 +123,7 @@ index 0000000..3dcf6fd
 +				marvell,pins = "mpp49";
 +				marvell,function = "gpio";
 +			};
-+			pmx_led_function_red: pmx-led-function_red {
++			pmx_led_function_red: pmx-led-function-red {
 +				marvell,pins = "mpp34";
 +				marvell,function = "gpio";
 +			};
@@ -158,8 +158,6 @@ index 0000000..3dcf6fd
 +		};
 +
 +		serial@12000 {
-+			pinctrl-0 = <&pmx_uart0>;
-+			pinctrl-names = "default";
 +			status = "okay";
 +		};
 +
@@ -174,7 +172,7 @@ index 0000000..3dcf6fd
 +			m25p40@0 {
 +				#address-cells = <1>;
 +				#size-cells = <1>;
-+				compatible = "m25p40";
++				compatible = "st,m25p40", "jedec,spi-nor";
 +				reg = <0>;
 +				spi-max-frequency = <25000000>;
 +				mode = <0>;
@@ -255,14 +253,12 @@ index 0000000..3dcf6fd
 +		led@4 {
 +			label = "lswxl:blue:power";
 +			gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
-+			default-state = "keep";
 +		};
 +
 +		led@5 {
 +			label = "lswxl:red:func";
 +			gpios = <&gpio1 5 GPIO_ACTIVE_LOW>;
 +			default-state = "keep";
-+			linux,default-trigger = "heartbeat";
 +		};
 +
 +		led@6 {
@@ -342,24 +338,17 @@ index 0000000..3dcf6fd
 +&mdio {
 +	status = "okay";
 +
-+	ethphy0: ethernet-phy@0 {
-+		device_type = "ethernet-phy";
-+		reg = <0>;
-+	};
-+
 +	ethphy1: ethernet-phy@8 {
 +		device_type = "ethernet-phy";
 +		reg = <8>;
 +	};
 +};
 +
-+&eth0 {
++&eth1 {
 +	status = "okay";
-+	reg = <0x76000 0x4000>;
-+	clocks = <&gate_clk 19>;
-+	ethernet0-port@0 {
++
++	ethernet1-port@0 {
 +		phy-handle = <&ethphy1>;
-+		interrupts = <15>;
 +	};
 +};
 -- 
